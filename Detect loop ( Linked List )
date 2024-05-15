@@ -1,0 +1,129 @@
+/*
+P3. Detect Loop in List
+Some times it so happens, last node of linked list doesn't point to NULL, instead it might point
+to other element in the list, which makes the list inoperable for some operations.
+Write a code to detect loop in the list.
+
+Example:
+input : head -> 1 -> 2- >3->null
+output : No Loop found 
+
+input : head -> 1 -> 2->3->13->5->2
+output : Loop found
+
+*/
+
+#include <iostream>
+
+using namespace std;
+
+// Node structure to represent a node in the linked list
+struct Node {
+  int data;
+  Node* next;
+
+  Node(int data) {
+    this->data = data;
+    this->next = nullptr;
+  }
+};
+
+// Linked List class to manage the list
+class LinkedList {
+    private:
+        Node* head;
+
+    public:
+    LinkedList() {
+        head = nullptr;
+    }
+  
+    // Add a node at the end of the list
+    void addNode(int data) {
+        Node* newNode = new Node(data);
+        //Step 1 : Check for Empty List
+        if (head == nullptr) {
+            head = newNode;
+            return;
+        }
+        //Step 2: Traverse to end of List  
+        Node* temp = head;
+        while (temp->next != nullptr) {
+            temp = temp->next;
+        }
+        //Step 3: Add New Node
+        temp->next = newNode;
+    }
+  
+    bool detectLoop()  { 
+        Node* temp = head;
+        Node* traverse = head->next;
+        while(traverse->next != nullptr){
+            if(traverse->next==head->next){
+                return true;
+            }
+            else{
+                traverse=traverse->next;
+            }
+        }
+        return false; 
+    }
+    // Traverse the list and print the data of each node
+    void traverse() {
+        if (head == nullptr) {
+            cout << "List is empty!" << endl;
+            return;
+        }
+
+        Node* temp = head;
+        while (temp != nullptr) {
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
+        cout << endl;
+    }
+    void createLoop(int pos)  {
+        if (head == nullptr) {
+            cout << "List is empty!" << endl;
+            return;
+        }
+        Node* tempNode = head;
+        Node* loopNode = nullptr;
+        int count =0;
+        while (tempNode->next != nullptr) {
+            if(count == pos)
+                loopNode = tempNode;
+            tempNode = tempNode->next;
+            count++;    
+        }        
+        tempNode->next = loopNode;
+    
+    }     
+};
+
+int main() {
+    LinkedList list1,list2;
+    list1.addNode(1);
+    list1.addNode(2);
+    list1.addNode(3);
+
+    if(!list1.detectLoop())
+        cout << "1st Test Passed" <<endl;
+    else
+        cout << "1st Test Failed" <<endl;
+
+    list2.addNode(1);
+    list2.addNode(2);
+    list2.addNode(3);    
+    list2.addNode(7);
+    list2.addNode(9);
+    list2.addNode(3);
+    //list.traverse();
+    list2.createLoop(1);
+    if(list2.detectLoop())
+        cout << "2nd Test Passed" <<endl;
+    else
+        cout << "2nd Test Failed" <<endl;
+
+    return 0;
+}
