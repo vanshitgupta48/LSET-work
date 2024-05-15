@@ -1,0 +1,148 @@
+/*
+P4. Shuffle Merge Lists
+Given two lists, they need to be merged in such way elements from both lists are alternated/interleaved.
+
+Example:
+input : 
+List1:  1 -> 2- >5->7->null
+Lis2:   2->4->6->8->null
+output : 1->2->3->4->5->6->7->8->null  
+*/
+
+#include <iostream>
+using namespace std;
+  
+// Node structure to represent a node in the linked list
+struct Node {
+  int data;
+  Node* next;
+
+  Node(int data) {
+    this->data = data;
+    this->next = nullptr;
+  }
+};
+
+// Linked List class to manage the list
+class LinkedList {
+    private:
+        Node* head;
+
+    public:
+    LinkedList() {
+        head = nullptr;
+    }
+    
+    Node *getHead(){
+        return head;
+    }
+    
+    // Add a node at the end of the list
+    void addNode(int data) {
+        Node* newNode = new Node(data);
+        //Step 1 : Check for Empty List
+        if (head == nullptr) {
+            head = newNode;
+            return;
+        }
+        //Step 2: Traverse to end of List  
+        Node* temp = head;
+        while (temp->next != nullptr) {
+            temp = temp->next;
+        }
+        //Step 3: Add New Node
+        temp->next = newNode;
+    }
+ 
+    // Traverse the list and print the data of each node
+    void traverse() {
+        if (head == nullptr) {
+            cout << "List is empty!" << endl;
+            return;
+        }
+
+        Node* temp = head;
+        while (temp != nullptr) {
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
+        cout << endl;
+    }
+
+    bool match(int arr[]){
+        Node* temp = head;
+        int i=0;
+        while (temp != nullptr) {
+            if(arr[i++]!=temp->data)
+                return false;
+            temp = temp->next;
+        }
+        return true;
+    }
+   
+};
+
+void ShuffleMerge(Node *list1, Node *list2)  {
+    if (list1 == nullptr) {
+        list1 = list2;
+        return;
+    }
+    if (list2 == nullptr) {
+        return;
+    }
+    Node* pcurr = list1;
+    Node* qcurr = list2;
+    Node* pnext = pcurr->next;
+    Node* qnext = qcurr->next;
+
+    while (pcurr != nullptr && qcurr != nullptr) {
+        pcurr->next = qcurr;
+        qcurr->next = pnext;
+
+        pcurr = pnext;
+        qcurr = qnext;
+
+        if (pcurr != nullptr) {
+            pnext = pcurr->next;
+        }
+        if (qcurr != nullptr) {
+            qnext = qcurr->next;
+        }
+    }
+}
+
+  
+// Main code  
+int main()  
+{  
+    LinkedList list1;
+    LinkedList list2;
+    //Linked List 1
+    list1.addNode(5);
+    list1.addNode(3);
+    list1.addNode(2);
+    list1.addNode(7);
+
+    cout << "Linked List 1: " << endl;
+    list1.traverse();
+
+    //Linked List 2
+    list2.addNode(11);
+    list2.addNode(13);
+    list2.addNode(12);
+    list2.addNode(17);
+    list2.addNode(19);
+    list2.addNode(15);
+    cout << "Linked List 2: " << endl;
+    list2.traverse();    
+
+    cout<<"List Post Shuffle Merge"<< endl;  
+    ShuffleMerge(list1.getHead(), list2.getHead());
+    list1.traverse();
+    int arr[] ={5, 11, 3, 13, 2, 12, 7, 17, 19, 15};
+    if(list1.match(arr))
+        cout<< "Merge Successful"<<endl;
+    else
+          cout<< "Merge Not Successful"<<endl;
+    return 0;  
+}  
