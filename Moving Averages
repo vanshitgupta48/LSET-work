@@ -1,0 +1,76 @@
+/*
+Problem Statement: 
+At the end of every trading day, last traded value of stock is stored in a stock specific data.
+Trader interested in knowing moving averages of past n number of days to suppress the daily noise.
+
+Assumption: You can assume for a given "n" days past data exist
+
+Input: 
+    stockPrice = {10, 10, 10, 10, 10, 20, 20, 20, 20, 20}; MA=5
+Output
+    mA = {10,12,14,16,18,20}
+
+
+*/
+
+#include <iostream>
+#include <queue>
+#include <vector>
+
+using namespace std;
+
+vector<double> movingAverages(const vector<int>& nums, int windowSize) {
+    vector<double> movingAvgs;
+    int count = 0;
+    for(int i = 0;i<windowSize-1;i++){
+        count+=nums[i];
+    }     
+    int iterator = 0;
+    for(int j = windowSize-1;j<nums.size();j++){
+        count+=nums[j];
+        double ans = (double) count / windowSize;
+        movingAvgs.push_back(ans);
+        count-=nums[iterator];
+        iterator++;
+    }
+
+    return movingAvgs;
+}
+
+int main() {
+    int i;
+    vector<int> relianceSP = {10, 10, 10, 10,10,10,10,10};
+    vector<double> relianceMA = {10,10,10,10,10};
+    int mAWindow = 4;
+    vector<double> mAvgs = movingAverages(relianceSP, mAWindow);
+
+    for(i=0;i<mAvgs.size();i++){
+        if(relianceMA[i]!=mAvgs[i]){
+            cout<<"1st Test Failed" <<endl;
+            break;       
+        }
+    }
+    if(i==mAvgs.size())
+        cout<<"1st Test Passed" <<endl;
+
+    vector<int> adaniSP = {10, 100, 200, 300,100,150,100,120};
+    vector<double> adaniMA = {152.5, 175, 187.5, 162.5, 117.5};
+    mAWindow = 4;
+    mAvgs = movingAverages(adaniSP, mAWindow);
+
+    for(i=0;i<mAvgs.size();i++){
+        if(adaniMA[i]!=mAvgs[i]){
+            cout<<"1st Test Failed" <<endl;
+            break;       
+        }
+    }
+    if(i==mAvgs.size())
+        cout<<"2nd Test Passed" <<endl;
+
+    // for (double avg : mAvgs) {
+    //     cout << avg << " ";
+    // }
+    // cout << endl;
+
+    return 0;
+}
