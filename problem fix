@@ -1,19 +1,19 @@
 #include <bits/stdc++.h>
 using namespace std;
  
-int evaluateExpression(const std::string& expr) {
-    std::istringstream iss(expr);
-    int result = 0;
+long long evaluateExpression(const string& expr) {
+    istringstream iss(expr);
+    long long result = 0;
     string sam = "";
-    for(int i = 0; i < expr.size(); i++) {
-        if(expr[i] == '+') {
-            result += stoi(sam);
+    for (char ch : expr) {
+        if (ch == '+') {
+            result += stoll(sam);
             sam = "";
         } else {
-            sam.push_back(expr[i]);
+            sam.push_back(ch);
         }
     }
-    result += stoi(sam); 
+    result += stoll(sam);
     return result;
 }
  
